@@ -1,0 +1,9 @@
+.container{
+  padding-top:32px;
+  display:flex;/*一套排版系統*/
+  align-items:center;/*字體置中*/
+  flex-direction:column;/*column:上下排 row:左右排*/
+}
+.delete{
+  margin:8px;
+}
