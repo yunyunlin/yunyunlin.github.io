@@ -8,7 +8,7 @@ body{
   -webkit-box-orient:horizontal;
   -webkit-box-direction:normal;
           flex-direction:row;
-  height:200vh;
+  height:100vh;
 }
 
 
@@ -117,7 +117,7 @@ body{
   -webkit-box-orient:vertical;
   -webkit-box-direction:normal;
           flex-direction:column;
-  height:200vh;
+  height:100vh;
 }
 
 .column2{
@@ -129,7 +129,7 @@ body{
   -webkit-box-orient:vertical;
   -webkit-box-direction:normal;
           flex-direction:column;
-  height:200vh;
+  height:100vh;
 }
 
 .picture1{
