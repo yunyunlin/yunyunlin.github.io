@@ -8,7 +8,7 @@ body{
   -webkit-box-orient:horizontal;
   -webkit-box-direction:normal;
           flex-direction:row;
-  height:100vh;
+  height:200vh;
 }
 
 
@@ -117,7 +117,7 @@ body{
   -webkit-box-orient:vertical;
   -webkit-box-direction:normal;
           flex-direction:column;
-  height:100vh;
+  height:200vh;
 }
 
 .column2{
@@ -129,7 +129,7 @@ body{
   -webkit-box-orient:vertical;
   -webkit-box-direction:normal;
           flex-direction:column;
-  height:100vh;
+  height:200vh;
 }
 
 .picture1{
@@ -304,7 +304,7 @@ body{
 /*calender 語法開始*/
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #3b323f;
+    background-color:#f8f8f4;
   height: 100vh;
 }
 
