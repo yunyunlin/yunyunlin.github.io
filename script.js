@@ -1,37 +1,183 @@
-var button=document.getElementById("create");
-var input=document.getElementById("input");//當按鈕被按時，出現input的打得值
-var list=document.getElementById("list");//把hello塞進去html
-
-//寫一個array儲存我們打的每個字 Storage寫完是表示重新整理完原本的操作不會消失
-var todolist =JSON.parse(localStorage.getItem("listItems"))||[];
-render();
-
-//先對按鈕進行設定
-button.addEventListener("click",addData);    //對按鈕進行監聽，當按鈕被按時，執行addData這個function
-
-function addData(){
-  if(input.value !=""){         //!=""是指輸入值為0不可按新增
-    todolist.push(input.value)  //寫一個array儲存我們打的每個字 
-    input.value="";                 //打完字輸入框內的字會消失
-    render();                       //寫一個function把todolist印出來
-  }                                    
+function charToHTML(c, i){
+  return `<span class="arielmove" style="animation-delay: ${i*0.3}s">${c}</span>`;
 }
 
-//刪除資料後
-//更新顯示畫面:render()
-function delData(i){
-  todolist.splice(i,1);
-  render();
+var title = document.getElementById("word");
+var charArray = title.innerHTML.split("")
+
+title.innerHTML = charArray.map(charToHTML).join("")
+
+
+//calender 語法開始
+var mesos = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'Desember'
+];
+
+var dies = [
+    'Diumenge',
+    'Dilluns',
+    'Dimarts',
+    'Dimecres',
+    'Dijous',
+    'Divendres',
+    'Dissabte'
+];
+
+var dies_abr = [
+    'SUN',
+    'MON',
+    'TUE',
+    'WED',
+    'THU',
+    'FRI',
+    'SAT'
+];
+
+Number.prototype.pad = function(num) {
+    var str = '';
+    for(var i = 0; i < (num-this.toString().length); i++)
+        str += '0';
+    return str += this.toString();
 }
 
-//印出todolist的function
-function render(){
-  var content="";
-  for(var i=0;i<todolist.length;i++){   //把逗號拿掉
-    content=content+"<div><button class='delete' onclick='delData("+i+")'>刪除</button>"+todolist[i]+"</div>";   
-    //+div自動換行的概念 用"跟+連結i跟前後的字串(每一個""都是一個字串)因為i是字串不是變數所以只打i電腦不懂要幹嘛  藍色字體是變數綠色字體是字串
-  }
-  alert(content);        //確定點了一下有進addData這個function
-  list.innerHTML=content;//再寫要顯示於htmlㄉCode
-  localStorage.setItem("listItems",JSON.stringify(todolist));
+function calendari(widget, data)
+{
+
+    var original = widget.getElementsByClassName('actiu')[0];
+
+    if(typeof original === 'undefined')
+    {
+        original = document.createElement('table');
+        original.setAttribute('data-actual',
+			      data.getFullYear() + '/' +
+			      data.getMonth().pad(2) + '/' +
+			      data.getDate().pad(2))
+        widget.appendChild(original);
+    }
+
+    var diff = data - new Date(original.getAttribute('data-actual'));
+
+    diff = new Date(diff).getMonth();
+
+    var e = document.createElement('table');
+
+    e.className = diff  === 0 ? 'amagat-esquerra' : 'amagat-dreta';
+    e.innerHTML = '';
+
+    widget.appendChild(e);
+
+    e.setAttribute('data-actual',
+                   data.getFullYear() + '/' +
+                   data.getMonth().pad(2) + '/' +
+                   data.getDate().pad(2))
+
+    var fila = document.createElement('tr');
+    var titol = document.createElement('th');
+    titol.setAttribute('colspan', 7);
+
+    var boto_prev = document.createElement('button');
+    boto_prev.className = 'boto-prev';
+    boto_prev.innerHTML = '&#9666;';
+
+    var boto_next = document.createElement('button');
+    boto_next.className = 'boto-next';
+    boto_next.innerHTML = '&#9656;';
+
+    titol.appendChild(boto_prev);
+    titol.appendChild(document.createElement('span')).innerHTML = 
+        mesos[data.getMonth()] + '<span class="any">' + data.getFullYear() + '</span>';
+
+    titol.appendChild(boto_next);
+
+    boto_prev.onclick = function() {
+        data.setMonth(data.getMonth() - 1);
+        calendari(widget, data);
+    };
+
+    boto_next.onclick = function() {
+        data.setMonth(data.getMonth() + 1);
+        calendari(widget, data);
+    };
+
+    fila.appendChild(titol);
+    e.appendChild(fila);
+
+    fila = document.createElement('tr');
+
+    for(var i = 1; i < 7; i++)
+    {
+        fila.innerHTML += '<th>' + dies_abr[i] + '</th>';
+    }
+
+    fila.innerHTML += '<th>' + dies_abr[0] + '</th>';
+    e.appendChild(fila);
+
+    /* Obtinc el dia que va acabar el mes anterior */
+    var inici_mes =
+        new Date(data.getFullYear(), data.getMonth(), -1).getDay();
+
+    var actual = new Date(data.getFullYear(),
+			  data.getMonth(),
+			  -inici_mes);
+
+    /* 6 setmanes per cobrir totes les posiblitats
+     *  Quedaria mes consistent alhora de mostrar molts mesos 
+     *  en una quadricula */
+    for(var s = 0; s < 6; s++)
+    {
+        var fila = document.createElement('tr');
+
+        for(var d = 1; d < 8; d++)
+        {
+	    var cela = document.createElement('td');
+	    var span = document.createElement('span');
+
+	    cela.appendChild(span);
+
+            span.innerHTML = actual.getDate();
+
+            if(actual.getMonth() !== data.getMonth())
+                cela.className = 'fora';
+
+            /* Si es avui el decorem */
+            if(data.getDate() == actual.getDate() &&
+	       data.getMonth() == actual.getMonth())
+		cela.className = 'avui';
+
+	    actual.setDate(actual.getDate()+1);
+            fila.appendChild(cela);
+        }
+
+        e.appendChild(fila);
+    }
+
+    setTimeout(function() {
+        e.className = 'actiu';
+        original.className +=
+        diff === 0 ? ' amagat-dreta' : ' amagat-esquerra';
+    }, 20);
+
+    original.className = 'inactiu';
+
+    setTimeout(function() {
+        var inactius = document.getElementsByClassName('inactiu');
+        for(var i = 0; i < inactius.length; i++)
+            widget.removeChild(inactius[i]);
+    }, 1000);
+
 }
+
+calendari(document.getElementById('calendari'), new Date());
+
+//calender 語法結束
